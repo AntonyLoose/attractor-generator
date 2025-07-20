@@ -114,13 +114,14 @@ strange attractors exist.
   - Slider
     - on change needs to set the elapsed time
     - needs to be locked while playing and before phase space is initialised
-    - unlock on `pause`
+    - unlock on `pause` state
   - Equation input
     - needs to parse text into equations that we can use -> a function that takes in time and some other variables and returns
       a value
     - we need a component for each equation
   - Play button
-    - unlock when equations and phase space are initialised
+    - unlock when equations are initialised
+    - init phase space
 - Rendering
   - setup scene
   - clear scene
@@ -133,12 +134,13 @@ strange attractors exist.
   - init phase space rendering
   - init three animation cycle
 - Dynamics
-  - init phase space
+  - init phase space 
   - get state
   - record state
   - calculate state, this should calculate and record previous states if required
   - combine equations
 - Global application state
+  - animation state (paused, playing, not started)
   - phase space
   - elapsed time
   - eq1
