@@ -2,7 +2,7 @@
 
 A web application that allows you to generate and visualise attractors in 3D for dynamical systems.
 
-## Getting Started
+## Running the Application
 
 Clone this repository:
 
