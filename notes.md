@@ -136,7 +136,7 @@ strange attractors exist.
   - init phase space
   - get state
   - record state
-  - calculate state
+  - calculate state, this should calculate and record previous states if required
   - combine equations
 - Global application state
   - phase space
