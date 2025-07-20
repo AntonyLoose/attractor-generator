@@ -109,6 +109,42 @@ strange attractors exist.
 
 ## Code Structure
 
+- UI (HTML & CSS)
+- Components
+  - Slider
+    - on change needs to set the elapsed time
+    - needs to be locked while playing and before phase space is initialised
+    - unlock on `pause`
+  - Equation input
+    - needs to parse text into equations that we can use -> a function that takes in time and some other variables and returns
+      a value
+    - we need a component for each equation
+  - Play button
+    - unlock when equations and phase space are initialised
+- Rendering
+  - setup scene
+  - clear scene
+  - add point
+  - remove point
+  - set elapsed time
+  - pause
+  - play
+  - clear
+  - init phase space rendering
+  - init three animation cycle
+- Dynamics
+  - init phase space
+  - get state
+  - record state
+  - calculate state
+  - combine equations
+- Global application state
+  - phase space
+  - elapsed time
+  - eq1
+  - eq2
+  - eq3
+
 ## Sources
 
 - [Phase Space](https://en.wikipedia.org/wiki/Phase_space)
