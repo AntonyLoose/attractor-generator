@@ -44,29 +44,3 @@ export function create_point(x, y, z, radius = 5, opacity = 1, width_segments = 
         z: z
     }
 }
-
-export function add_point(point, scene) {
-    scene.add(point.mesh);
-}
-
-export function remove_point(point, scene) {
-    scene.remove(point.mesh);
-}
-
-export function render_state_at_t(phase_space, equation, points, t, t_prev) {
-    let states = phase_space[t];
-    if (!states) {
-        states = calculate_states(phase_space, equation, t, t_prev);
-        phase_space[t] = states;
-    }
-
-    for (const point of points) {
-        const state = states[point.id];
-        if (!state) {
-            throw new Error(`State for point (${point.id}) does not exist.`);
-        }
-
-        const { x, y, z } = state;
-        point.mesh.position.set(x, y, z);
-    }
-}
