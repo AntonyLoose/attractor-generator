@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { calculate_states } from "./dynamics.js";
 
 export function init_three_animation_cycle(renderer, scene, camera, orbit_controls) {
     function animate() {
@@ -29,7 +30,7 @@ export function create_orbit_controls(camera, renderer) {
     return new OrbitControls(camera, renderer.domElement);
 }
 
-export function create_point(x, y, z, radius = 0.1, opacity = 1, width_segments = 8, height_segments = 8) {
+export function create_point(x, y, z, radius = 5, opacity = 1, width_segments = 8, height_segments = 8) {
     const geometry = new THREE.SphereGeometry(radius, width_segments, height_segments);
     const material = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, opacity, transparent: true });
     const sphere = new THREE.Mesh(geometry, material);
@@ -37,12 +38,14 @@ export function create_point(x, y, z, radius = 0.1, opacity = 1, width_segments 
 
     return {
         id: crypto.randomUUID(),
-        mesh: sphere
+        mesh: sphere,
+        x: x,
+        y: y,
+        z: z
     }
 }
 
 export function add_point(point, scene) {
-    console.log(point.mesh);
     scene.add(point.mesh);
 }
 
@@ -50,8 +53,12 @@ export function remove_point(point, scene) {
     scene.remove(point.mesh);
 }
 
-export function render_state_at_t(t, phase_space, points) {
-    const states = phase_space[t];
+export function render_state_at_t(phase_space, equation, points, t, t_prev) {
+    let states = phase_space[t];
+    if (!states) {
+        states = calculate_states(phase_space, equation, t, t_prev);
+        phase_space[t] = states;
+    }
 
     for (const point of points) {
         const state = states[point.id];
