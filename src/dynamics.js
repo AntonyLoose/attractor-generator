@@ -8,14 +8,6 @@ export function create_phase_space(initial_points, initial_time = 0) {
     }
 }
 
-export function get_states_for_t(t, phase_space) {
-
-}
-
-export function get_state_for_t(t, state_id, phase_space) {
-
-}
-
 export function record_state_for_t(t, state, phase_space) {
 
 }
