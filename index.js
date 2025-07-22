@@ -77,7 +77,7 @@ function update_trail(trail, line, delta, max_age_millis) {
 }
 
 function update_elapsed(state) {
-    const remainder = (state.elapsed) % 1000;
+    const remainder = (state.elapsed) % 500;
     if (remainder === 0 && state.recording) {
         state.states[state.elapsed] = {
             point: JSON.parse(JSON.stringify(state.point)),
@@ -229,7 +229,9 @@ record_button.onclick = () => {
 const slider = document.getElementById("slider");
 slider.onchange = (e) => {
     state.playing = false;
-    play_button.src = "./public/play.svg";
+
+    const img = play_button.getElementsByTagName("img")[0];
+    img.src = "./public/play.svg";
 
     const time = times[e.target.value];
     const prev_state = state.states[time];
