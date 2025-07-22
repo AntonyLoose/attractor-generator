@@ -84,17 +84,28 @@ function update(delta, state) {
     update_trail(trail, line, delta, max_age_seconds);
 }
 
-function lorenz(x, y, z, delta, sigma = 10, rho = 28, beta = 8 / 3) {
+function lorenz(x, y, z, delta, scale = 1, sigma = 10, rho = 28, beta = 8 / 3) {
     const dx = sigma * (y - x);
     const dy = x * (rho - z) - y;
     const dz = (x * y) - (beta * z)
     return {
-        x: x + (dx * delta),
-        y: y + (dy * delta),
-        z: z + (dz * delta)
+        x: x + dx * delta * scale,
+        y: y + dy * delta * scale,
+        z: z + dz * delta * scale
     }
 }
 
+// Generated with GPT-4
+function rossler(x, y, z, delta, scale = 3, a = 0.2, b = 0.2, c = 5.7) {
+    const dx = -y - z;
+    const dy = x + a * y;
+    const dz = b + z * (x - c);
+    return {
+        x: x + dx * delta * scale,
+        y: y + dy * delta * scale,
+        z: z + dz * delta * scale
+    };
+}
 
 // ---- Initialising scene ---- //
 
@@ -113,7 +124,7 @@ const state = {
     playing: true
 }
 
-camera.position.set(state.point.x, state.point.y, state.point.z + 80);
+camera.position.set(state.point.x, state.point.y, state.point.z + 60);
 orbit_controls.target.set(state.point.x, state.point.y, state.point.z);
 scene.add(state.point.mesh);
 scene.add(state.line);
@@ -129,17 +140,24 @@ setInterval(() => {
 // ---- Attaching listeners ---- //
 
 async function set_dynamicial_system(system) {
-    state.point.x = system.initial_point.x;
-    state.point.y = system.initial_point.y;
-    state.point.z = system.initial_point.z;
+    const { x, y, z } = system.initial_point;
+    state.point.x = x;
+    state.point.y = y;
+    state.point.z = z;
     state.trail = [];
     state.equation = system.equation;
+    orbit_controls.target.set(x, y, z)
+    camera.position.set(x, y, z + 60)
 }
 
 const dynamical_systems = {
     lorenz: {
         equation: lorenz,
         initial_point: { x: 1, y: 1, z: 20 }
+    },
+    rossler: {
+        equation: rossler,
+        initial_point: { x: 0.1, y: 0.0, z: 0.0 }
     }
 };
 
