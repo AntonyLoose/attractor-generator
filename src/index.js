@@ -119,7 +119,7 @@ const state = {
     line: create_line([]),
     trail: [],
     equation: lorenz,
-    max_age_seconds: 10,
+    max_age_seconds: 20,
     t_step: 0.01,
     playing: true
 }
