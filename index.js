@@ -77,7 +77,8 @@ function update_trail(trail, line, delta, max_age_seconds) {
 }
 
 function update_elapsed(state) {
-    if (state.elapsed % 0.5 === 0) {
+    // Only record state if the user is recording.
+    if (state.elapsed % 1 === 0 && state.recording) {
         state.states[state.elapsed] = {
             point: JSON.parse(JSON.stringify(state.point)),
             trail: JSON.parse(JSON.stringify(state.trail))
@@ -132,11 +133,12 @@ const state = {
     line: create_line([]),
     trail: [],
     equation: lorenz,
-    max_age_seconds: 20,
+    max_age_seconds: 10,
     t_step: 0.01,
     playing: true,
     elapsed: 0,
-    states: {}
+    states: {},
+    recording: false
 }
 
 camera.position.set(state.point.x, state.point.y, state.point.z + 60);
@@ -163,6 +165,7 @@ async function set_dynamicial_system(system) {
     state.equation = system.equation;
     state.elapsed = 0;
     state.states = {};
+    state.recording = false;
     orbit_controls.target.set(x, y, z)
     camera.position.set(x, y, z + 60)
 }
@@ -192,16 +195,15 @@ for (const key of Object.keys(dynamical_systems)) {
 document.addEventListener("keydown", (e) => {
     if (e.key === "s") {
         state.playing = !state.playing;
-        console.log(state);
     } else if (e.key === "x") {
-        const { point, trail } = state.states[1.5];
+        const { point, trail } = state.states[2];
         const { x, y, z, age } = point;
         state.point.x = x;
         state.point.y = y;
         state.point.z = z;
         state.point.age = age;
         state.trail = trail;
-        state.elapsed = 1.5;
+        state.elapsed = 2;
     }
 });
 
