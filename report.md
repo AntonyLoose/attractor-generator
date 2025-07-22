@@ -109,8 +109,26 @@ function update_elapsed(state) {
   that caused the issue was this:
 
 ```ts
+function update_trail(trail, line, delta, max_age_millis) {
+    for (const trail_point of trail) {
+        trail_point.age += delta;
+    }
+    trail = trail.filter(point => point.age < max_age_millis);
+    state.line.geometry = create_line_geometry(trail);
+}
 
+// FIXED
+function update_trail(state, delta, max_age_millis) {
+    for (const trail_point of state.trail) {
+        trail_point.age += delta;
+    }
+    state.trail = state.trail.filter(point => point.age < max_age_millis);
+    state.line.geometry = create_line_geometry(state.trail);
+}
 ```
+
+- I was assigning the new trail to a function parameter, the internals of this array pointed to `state.trail` but the actual
+  variable was separate, so assigning the trail to it does nothing
 
 ## Conclusion
 
