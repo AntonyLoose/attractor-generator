@@ -13,7 +13,17 @@
   "license": "ISC",
   "author": "Antony Loose",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-      "run": "npx http-server -c-1"
+    "start": "npx http-server -c-1",
+    "build": "npx rollup --config"
+  },
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^16.0.1",
+    "http-server": "^14.1.1",
+    "rollup": "^4.45.1"
+  },
+  "dependencies": {
+    "three": "^0.178.0"
   }
 }
