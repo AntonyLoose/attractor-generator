@@ -15,7 +15,7 @@ const camera = create_camera(container);
 const orbit_controls = create_orbit_controls(camera, renderer);
 
 camera.position.set(0, 0, 80);
-orbit_controls.target.set(0, 0, 0);
+orbit_controls.target.set(1, 1, 20);
 init_three_animation_cycle(renderer, scene, camera, orbit_controls);
 
 const states = {};
