@@ -200,15 +200,17 @@ for (const key of Object.keys(dynamical_systems)) {
 
 const play_button = document.getElementById("play-button");
 play_button.onclick = () => {
+    const img = play_button.getElementsByTagName("img")[0];
     state.playing = !state.playing;
-    play_button.src = state.playing ? "./public/pause.svg" : "./public/play.svg";
+    img.src = state.playing ? "./public/pause.svg" : "./public/play.svg";
 };
 
 let times = [];
 const record_button = document.getElementById("record-button");
 record_button.onclick = () => {
+    const img = record_button.getElementsByTagName("img")[0];
     state.recording = !state.recording;
-    record_button.src = state.recording ? "./public/stop.svg" : "./public/record.svg";
+    img.src = state.recording ? "./public/stop.svg" : "./public/record.svg";
 
     if (state.recording) {
         clear_slider(slider);
