@@ -135,7 +135,7 @@ const state = {
     equation: lorenz,
     max_age_seconds: 10,
     t_step: 0.01,
-    playing: true,
+    playing: false,
     elapsed: 0,
     states: {},
     recording: false
@@ -181,29 +181,20 @@ const dynamical_systems = {
     }
 };
 
-const buttons_container = document.getElementById("buttons-container");
+const dynamics_buttons_container = document.getElementById("dynamics-buttons-container");
 for (const key of Object.keys(dynamical_systems)) {
     const system = dynamical_systems[key];
     const button = document.createElement("button");
+    button.className = "dynamics-button button";
     button.textContent = key;
     button.onclick = () => {
         set_dynamicial_system(system);
     }
-    buttons_container.appendChild(button);
+    dynamics_buttons_container.appendChild(button);
 }
 
-document.addEventListener("keydown", (e) => {
-    if (e.key === "s") {
-        state.playing = !state.playing;
-    } else if (e.key === "x") {
-        const { point, trail } = state.states[2];
-        const { x, y, z, age } = point;
-        state.point.x = x;
-        state.point.y = y;
-        state.point.z = z;
-        state.point.age = age;
-        state.trail = trail;
-        state.elapsed = 2;
-    }
-});
-
+const play_button = document.getElementById("play-button");
+play_button.onclick = () => {
+    state.playing = !state.playing;
+    play_button.src = state.playing ? "./public/pause.svg" : "./public/play.svg";
+};
