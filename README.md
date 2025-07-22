@@ -12,23 +12,12 @@ Clone this repository:
 git clone git@github.com:AntonyLoose/attractor-generator.git
 ```
 
-Install `http-server`:
+Run the following commands:
 
 ```bash
-npm -g i http-server
-```
-
-This will install `http-server` globally, if you do not plan on using this in the future, I would recommend
-uninstalling once you are done with this project:
-
-```bash
-npm -g uninstall http-server
-```
-
-Run the server:
-
-```bash
-http-server /path/to/attractor-generator/src
+npm i
+npm run build
+npm run dev
 ```
 
 Now open [localhost:8000](http://localhost:8000).
