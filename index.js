@@ -202,7 +202,7 @@ const play_button = document.getElementById("play-button");
 play_button.onclick = () => {
     const img = play_button.getElementsByTagName("img")[0];
     state.playing = !state.playing;
-    img.src = state.playing ? "./public/pause.svg" : "./public/play.svg";
+    img.src = state.playing ? "./assets/pause.svg" : "./public/play.svg";
 };
 
 let times = [];
@@ -210,7 +210,7 @@ const record_button = document.getElementById("record-button");
 record_button.onclick = () => {
     const img = record_button.getElementsByTagName("img")[0];
     state.recording = !state.recording;
-    img.src = state.recording ? "./public/stop.svg" : "./public/record.svg";
+    img.src = state.recording ? "./assets/stop.svg" : "./public/record.svg";
 
     if (state.recording) {
         clear_slider(slider);
@@ -231,7 +231,7 @@ slider.onchange = (e) => {
     state.playing = false;
 
     const img = play_button.getElementsByTagName("img")[0];
-    img.src = "./public/play.svg";
+    img.src = "./assets/play.svg";
 
     const time = times[e.target.value];
     const prev_state = state.states[time];
