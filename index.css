@@ -1,0 +1,56 @@
+body {
+    margin: 0px;
+    background-color: #000000;
+}
+
+.button {
+    background-color: #0033cc;
+    color: #EEFFEE;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+    transition: filter 0.3s ease;
+}
+
+.button:hover {
+    filter: brightness(90%);
+}
+
+.button:active{
+    filter: brightness(80%);
+}
+
+/* Using ID selectors is fine due to the small scale */
+
+#container {
+    width: 100%;
+    height: 100vh;
+}
+
+.controls-container {
+    position: absolute;
+    bottom: 30px;
+    width: 100%;
+}
+
+#dynamics-buttons-container,
+#playback-buttons-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+#dynamics-buttons-container {
+    margin-bottom: 10px;
+}
+
+.dynamics-button {
+    min-width: 100px;
+}
+
+#play-button {
+
+}

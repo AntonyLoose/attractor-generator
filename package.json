@@ -1,0 +1,29 @@
+{
+  "name": "attractor-generator",
+  "version": "1.0.0",
+  "description": "A website for visualising attrators in dynamical systems",
+  "homepage": "https://github.com/AntonyLoose/attractor-generator#readme",
+  "bugs": {
+    "url": "https://github.com/AntonyLoose/attractor-generator/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AntonyLoose/attractor-generator.git"
+  },
+  "license": "ISC",
+  "author": "Antony Loose",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "npx http-server -c-1",
+    "build": "npx rollup --config"
+  },
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^16.0.1",
+    "http-server": "^14.1.1",
+    "rollup": "^4.45.1"
+  },
+  "dependencies": {
+    "three": "^0.178.0"
+  }
+}
