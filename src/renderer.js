@@ -1,6 +1,5 @@
 import * as THREE from "three";
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { calculate_states } from "./dynamics.js";
 
 export function init_three_animation_cycle(renderer, scene, camera, orbit_controls) {
     function animate() {
@@ -30,7 +29,7 @@ export function create_orbit_controls(camera, renderer) {
     return new OrbitControls(camera, renderer.domElement);
 }
 
-export function create_point(x, y, z, radius = 5, opacity = 1, width_segments = 8, height_segments = 8) {
+export function create_point(x, y, z, radius = 0.1, opacity = 1, width_segments = 8, height_segments = 8) {
     const geometry = new THREE.SphereGeometry(radius, width_segments, height_segments);
     const material = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, opacity, transparent: true });
     const sphere = new THREE.Mesh(geometry, material);
@@ -41,6 +40,7 @@ export function create_point(x, y, z, radius = 5, opacity = 1, width_segments = 
         mesh: sphere,
         x: x,
         y: y,
-        z: z
+        z: z,
+        age: 0
     }
 }
