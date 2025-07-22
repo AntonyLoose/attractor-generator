@@ -77,8 +77,9 @@ function update_trail(trail, line, delta, max_age_seconds) {
 }
 
 function update_elapsed(state) {
-    // Only record state if the user is recording.
-    if (state.elapsed % 1 === 0 && state.recording) {
+    const factor = 10;
+    const remainder = (state.elapsed * factor) % 1; // To avoid floating point precision errors.
+    if (remainder === 0 && state.recording) {
         state.states[state.elapsed] = {
             point: JSON.parse(JSON.stringify(state.point)),
             trail: JSON.parse(JSON.stringify(state.trail))
@@ -86,7 +87,9 @@ function update_elapsed(state) {
     }
 
     state.elapsed += state.t_step;
-    state.elapsed = Math.round(state.elapsed / state.t_step) * state.t_step;
+    state.elapsed = Math.round(state.elapsed * 100) / 100;
+    // This being hard coded is not good, the 100 should vary based on t_step; however, using t_step leads to floating point precision errors
+    // and I am running out of time to solve this.
 }
 
 function update(delta, state) {
@@ -197,4 +200,13 @@ const play_button = document.getElementById("play-button");
 play_button.onclick = () => {
     state.playing = !state.playing;
     play_button.src = state.playing ? "./public/pause.svg" : "./public/play.svg";
+};
+
+const record_button = document.getElementById("record-button");
+record_button.onclick = () => {
+    state.recording = !state.recording;
+    record_button.src = state.recording ? "./public/stop.svg" : "./public/record.svg";
+    if (state.recording) {
+        state.states = {};
+    }
 };
