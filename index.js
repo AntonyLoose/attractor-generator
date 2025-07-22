@@ -68,17 +68,16 @@ function add_trail_point(trail, x, y, z) {
     trail.push(point);
 }
 
-function update_trail(trail, line, delta, max_age_seconds) {
+function update_trail(trail, line, delta, max_age_millis) {
     for (const trail_point of trail) {
         trail_point.age += delta;
     }
-    trail = trail.filter(point => point.age < max_age_seconds);
+    trail = trail.filter(point => point.age < max_age_millis);
     line.geometry = create_line_geometry(trail);
 }
 
 function update_elapsed(state) {
-    const factor = 10;
-    const remainder = (state.elapsed * factor) % 1; // To avoid floating point precision errors.
+    const remainder = (state.elapsed) % 1000;
     if (remainder === 0 && state.recording) {
         state.states[state.elapsed] = {
             point: JSON.parse(JSON.stringify(state.point)),
@@ -87,18 +86,15 @@ function update_elapsed(state) {
     }
 
     state.elapsed += state.t_step;
-    state.elapsed = Math.round(state.elapsed * 100) / 100;
-    // This being hard coded is not good, the 100 should vary based on t_step; however, using t_step leads to floating point precision errors
-    // and I am running out of time to solve this.
 }
 
 function update(delta, state) {
-    const { point, line, trail, equation, max_age_seconds } = state;
-    const { x, y, z } = equation(point.x, point.y, point.z, delta);
+    const { point, line, trail, equation, max_age_millis } = state;
+    const { x, y, z } = equation(point.x, point.y, point.z, delta / 1000);
     update_elapsed(state);
     move_point(point, x, y, z);
     add_trail_point(trail, point.x, point.y, point.z);
-    update_trail(trail, line, delta, max_age_seconds);
+    update_trail(trail, line, delta, max_age_millis);
 }
 
 function lorenz(x, y, z, delta, scale = 1, sigma = 10, rho = 28, beta = 8 / 3) {
@@ -112,7 +108,6 @@ function lorenz(x, y, z, delta, scale = 1, sigma = 10, rho = 28, beta = 8 / 3) {
     }
 }
 
-// Generated with GPT-4
 function rossler(x, y, z, delta, scale = 3, a = 0.2, b = 0.2, c = 5.7) {
     const dx = -y - z;
     const dy = x + a * y;
@@ -136,8 +131,8 @@ const state = {
     line: create_line([]),
     trail: [],
     equation: lorenz,
-    max_age_seconds: 10,
-    t_step: 0.01,
+    max_age_millis: 10000,
+    t_step: 10,
     playing: false,
     elapsed: 0,
     states: {},
@@ -154,23 +149,29 @@ setInterval(() => {
     if (state.playing) {
         update(state.t_step, state);
     }
-}, 1000 * state.t_step)
+}, state.t_step)
 
 
-// ---- Attaching listeners ---- //
+// ---- Setting up components & listeners ---- //
 
-async function set_dynamicial_system(system) {
+function set_dynamicial_system(system) {
     const { x, y, z } = system.initial_point;
-    state.point.x = x;
-    state.point.y = y;
-    state.point.z = z;
     state.trail = [];
     state.equation = system.equation;
     state.elapsed = 0;
     state.states = {};
     state.recording = false;
+    move_point(state.point, x, y, z);
+    update(0, state);
     orbit_controls.target.set(x, y, z)
     camera.position.set(x, y, z + 60)
+}
+
+function clear_slider(slider) {
+    state.states = {};
+    slider.max = 0;
+    slider.value = 0
+    slider.step = 0;
 }
 
 const dynamical_systems = {
@@ -192,6 +193,7 @@ for (const key of Object.keys(dynamical_systems)) {
     button.textContent = key;
     button.onclick = () => {
         set_dynamicial_system(system);
+        clear_slider(slider);
     }
     dynamics_buttons_container.appendChild(button);
 }
@@ -202,11 +204,39 @@ play_button.onclick = () => {
     play_button.src = state.playing ? "./public/pause.svg" : "./public/play.svg";
 };
 
+let times = [];
 const record_button = document.getElementById("record-button");
 record_button.onclick = () => {
     state.recording = !state.recording;
     record_button.src = state.recording ? "./public/stop.svg" : "./public/record.svg";
+
     if (state.recording) {
-        state.states = {};
+        clear_slider(slider);
+        return;
     }
+
+    times = Object.keys(state.states)
+        .map(k => parseFloat(k))
+        .sort((a, b) => a - b)
+    slider.min = 0;
+    slider.max = times.length - 1;
+    slider.value = 0;
+    slider.step = 1;
 };
+
+const slider = document.getElementById("slider");
+slider.onchange = (e) => {
+    state.playing = false;
+    play_button.src = "./public/play.svg";
+
+    const time = times[e.target.value];
+    const prev_state = state.states[time];
+    const { x, y, z, age } = prev_state.point;
+    const trail = prev_state.trail
+    state.elapsed = time;
+    state.point.age = age;
+    state.trail = trail;
+
+    move_point(state.point, x, y, z);
+    update(0, state);
+}
