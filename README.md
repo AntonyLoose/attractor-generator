@@ -21,5 +21,5 @@ npm run build
 npm run dev
 ```
 
-Now open [localhost:8000](http://localhost:8000).
+Now open [localhost:8080](http://localhost:8080).
 
