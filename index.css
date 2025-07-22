@@ -28,19 +28,23 @@ body {
     height: 100vh;
 }
 
+.controls-container {
+    position: absolute;
+    bottom: 30px;
+    width: 100%;
+}
+
 #dynamics-buttons-container,
 #playback-buttons-container {
-    position: absolute;
     width: 100%;
-    bottom: 90px;
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 10px;
 }
 
-#playback-buttons-container {
-    bottom: 30px;
+#dynamics-buttons-container {
+    margin-bottom: 10px;
 }
 
 .dynamics-button {
