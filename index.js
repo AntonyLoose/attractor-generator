@@ -76,9 +76,22 @@ function update_trail(trail, line, delta, max_age_seconds) {
     line.geometry = create_line_geometry(trail);
 }
 
+function update_elapsed(state) {
+    if (state.elapsed % 0.5 === 0) {
+        state.states[state.elapsed] = {
+            point: JSON.parse(JSON.stringify(state.point)),
+            trail: JSON.parse(JSON.stringify(state.trail))
+        }
+    }
+
+    state.elapsed += state.t_step;
+    state.elapsed = Math.round(state.elapsed / state.t_step) * state.t_step;
+}
+
 function update(delta, state) {
     const { point, line, trail, equation, max_age_seconds } = state;
     const { x, y, z } = equation(point.x, point.y, point.z, delta);
+    update_elapsed(state);
     move_point(point, x, y, z);
     add_trail_point(trail, point.x, point.y, point.z);
     update_trail(trail, line, delta, max_age_seconds);
@@ -121,7 +134,9 @@ const state = {
     equation: lorenz,
     max_age_seconds: 20,
     t_step: 0.01,
-    playing: true
+    playing: true,
+    elapsed: 0,
+    states: {}
 }
 
 camera.position.set(state.point.x, state.point.y, state.point.z + 60);
@@ -146,6 +161,8 @@ async function set_dynamicial_system(system) {
     state.point.z = z;
     state.trail = [];
     state.equation = system.equation;
+    state.elapsed = 0;
+    state.states = {};
     orbit_controls.target.set(x, y, z)
     camera.position.set(x, y, z + 60)
 }
@@ -171,3 +188,20 @@ for (const key of Object.keys(dynamical_systems)) {
     }
     buttons_container.appendChild(button);
 }
+
+document.addEventListener("keydown", (e) => {
+    if (e.key === "s") {
+        state.playing = !state.playing;
+        console.log(state);
+    } else if (e.key === "x") {
+        const { point, trail } = state.states[1.5];
+        const { x, y, z, age } = point;
+        state.point.x = x;
+        state.point.y = y;
+        state.point.z = z;
+        state.point.age = age;
+        state.trail = trail;
+        state.elapsed = 1.5;
+    }
+});
+
