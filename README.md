@@ -2,7 +2,8 @@
 
 A web application that allows you to generate and visualise attractors in 3D for dynamical systems.
 
-You can find a live demo [here](https://antonyloose.github.io/attractor-generator/).
+You can find a live demo [here](https://antonyloose.github.io/attractor-generator/). For simplicity, this demo serves all
+the files in the root of the repository, allowing me to avoid some build steps.
 
 ## Running the Application
 
