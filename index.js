@@ -68,12 +68,12 @@ function add_trail_point(trail, x, y, z) {
     trail.push(point);
 }
 
-function update_trail(trail, line, delta, max_age_millis) {
-    for (const trail_point of trail) {
+function update_trail(state, delta, max_age_millis) {
+    for (const trail_point of state.trail) {
         trail_point.age += delta;
     }
-    trail = trail.filter(point => point.age < max_age_millis);
-    line.geometry = create_line_geometry(trail);
+    state.trail = state.trail.filter(point => point.age < max_age_millis);
+    state.line.geometry = create_line_geometry(state.trail);
 }
 
 function update_elapsed(state) {
@@ -89,12 +89,12 @@ function update_elapsed(state) {
 }
 
 function update(delta, state) {
-    const { point, line, trail, equation, max_age_millis } = state;
+    const { point, trail, equation, max_age_millis } = state;
     const { x, y, z } = equation(point.x, point.y, point.z, delta / 1000);
     update_elapsed(state);
     move_point(point, x, y, z);
     add_trail_point(trail, point.x, point.y, point.z);
-    update_trail(trail, line, delta, max_age_millis);
+    update_trail(state, delta, max_age_millis);
 }
 
 function lorenz(x, y, z, delta, scale = 1, sigma = 10, rho = 28, beta = 8 / 3) {

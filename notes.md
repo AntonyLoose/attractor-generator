@@ -82,8 +82,6 @@ of these points is called a periodic point.
 
 ### Limit Cycle
 
-TODO: understand this better
-
 A limit cycle is a periodic orbit of a continuous dynamical system that is isolated. It concerns a cyclic attractor.
 
 ### Limit Torus
@@ -98,54 +96,20 @@ strange attractors exist.
 
 ## UX
 
-- Define an equation
-  - Allow selecting some predefined equations
-- Specify the step of $t$
-- Add initial particles
-- Specify life time of particles
-  - $t - life time$ => $t$ images shown of each particle, with a fading/gradient effect so that older particles appear more translucent
-- Start the system
-- Scrub the system to any point that has played previously
+This was my final approach, it is very different from what I initially thought the UX would be.
+
+- Pick equation
+- Play/pause
+- Record
+- Scrub recording
 
 ## Code Structure
 
 - UI (HTML & CSS)
-- Components
-  - Slider
-    - on change needs to set the elapsed time
-    - needs to be locked while playing and before phase space is initialised
-    - unlock on `pause` state
-  - Equation input
-    - needs to parse text into equations that we can use -> a function that takes in time and some other variables and returns
-      a value
-    - we need a component for each equation
-  - Play button
-    - unlock when equations are initialised
-    - init phase space
 - Rendering
-  - setup scene
-  - clear scene
-  - add point
-  - remove point
-  - set elapsed time
-  - pause
-  - play
-  - clear
-  - init phase space rendering
-  - init three animation cycle
 - Dynamics
-  - init phase space 
-  - get state
-  - record state
-  - calculate state, this should calculate and record previous states if required
-  - combine equations
 - Global application state
-  - animation state (paused, playing, not started)
-  - phase space
-  - elapsed time
-  - eq1
-  - eq2
-  - eq3
+- Components
 
 ## Sources
 
