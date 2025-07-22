@@ -18,6 +18,7 @@ camera.position.set(0, 0, 80);
 orbit_controls.target.set(0, 0, 0);
 init_three_animation_cycle(renderer, scene, camera, orbit_controls);
 
+const states = {};
 const point = create_point(1, 1, 20);
 const max_age_seconds = 10;
 const geometry = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(point.x, point.y, point.z)]);
@@ -48,7 +49,6 @@ function update(delta) {
     }
     trail = trail.filter(point => point.age < max_age_seconds);
 
-    const test = trail.map(point => new THREE.Vector3(point.x, point.y, point.z));
     // When trail length increases beyond previous point count
     geometry.dispose(); // free GPU memory
     line.geometry = new THREE.BufferGeometry().setFromPoints(trail.map(p => new THREE.Vector3(p.x, p.y, p.z)));
@@ -58,6 +58,28 @@ scene.add(point.mesh);
 scene.add(line);
 
 const step = 0.01;
+let elapsed = 0;
+const elapseds = [0];
 setInterval(() => {
     update(step);
+    elapsed += step;
+    const greatest = elapseds[elapseds.length - 1];
+    if (elapsed > greatest) {
+        elapseds.push(elapsed);
+    }
+
+    states[elapsed] = {
+        point: {
+            x: point.x,
+            y: point.y,
+            z: point.z,
+            age: point.age
+        },
+        trail: trail.map(point => ({
+            x: point.x,
+            y: point.y,
+            z: point.z,
+            age: point.age
+        }))
+    }
 }, 1000 * step)
